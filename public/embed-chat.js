@@ -6,7 +6,7 @@
   chatBtn.id = "torem-widget";
 
   // Logo image inside button
-chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 32px; height: 32px;" />';
+chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 48px; height: 48px;" />'; 
  
   Object.assign(chatBtn.style, {
     position: "fixed",
