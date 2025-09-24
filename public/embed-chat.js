@@ -14,11 +14,11 @@
     />
   `;
 
-  // Base styling
+  // Base styling for button
   Object.assign(chatBtn.style, {
     position: "fixed",
     bottom: "20px",
-    right: "-80px", // Start off-screen for animation
+    right: "-80px", // Start off-screen
     width: "60px",
     height: "60px",
     background: "#ffffff",
@@ -31,10 +31,10 @@
     zIndex: "9999",
     boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
     opacity: "0",
-    animation: "slideInRight 0.6s ease-out forwards",
+    animation: "slideInRight 0.6s ease-out 1s forwards", // ← 1s delay
   });
 
-  // Hover effect (scale applied via CSS class to avoid overwrite)
+  // Hover effects
   chatBtn.addEventListener("mouseenter", () => {
     chatBtn.style.boxShadow = "0 0 12px #3b82f6";
     chatBtn.style.transform = "scale(1.05)";
@@ -45,7 +45,7 @@
     chatBtn.style.transform = "scale(1)";
   });
 
-  // Click: toggle iframe
+  // Toggle iframe on button click
   chatBtn.onclick = function () {
     const existing = document.getElementById("torem-chat-iframe");
     if (existing) {
@@ -55,7 +55,7 @@
 
     const iframe = document.createElement("iframe");
     iframe.id = "torem-chat-iframe";
-    iframe.src = "https://yourdomain.com/chat-ui"; // Change this
+    iframe.src = "https://yourdomain.com/chat-ui"; // ⬅️ Update this to your chat UI
     Object.assign(iframe.style, {
       position: "fixed",
       bottom: "90px",
@@ -70,9 +70,10 @@
     document.body.appendChild(iframe);
   };
 
+  // Append to page
   document.body.appendChild(chatBtn);
 
-  // Add animation CSS
+  // Add keyframe animation
   const styleTag = document.createElement("style");
   styleTag.innerHTML = `
     @keyframes slideInRight {
