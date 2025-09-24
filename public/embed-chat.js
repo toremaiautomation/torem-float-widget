@@ -1,10 +1,12 @@
 (function () {
   if (document.getElementById("torem-widget")) return;
 
+  // Create the floating chat button
   const chatBtn = document.createElement("div");
   chatBtn.id = "torem-widget";
 
-  chatBtn.innerHTML = '<img src="https://example.com/logo.png" alt="Chat" style="width: 32px; height: 32px;" />';
+  // Logo image inside button
+  chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 32px; height: 32px;" />';
 
   Object.assign(chatBtn.style, {
     position: "fixed",
@@ -34,6 +36,7 @@
     chatBtn.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
   };
 
+  // Toggle iframe on button click
   chatBtn.onclick = function () {
     const existing = document.getElementById("torem-chat-iframe");
     if (existing) {
@@ -43,7 +46,7 @@
 
     const iframe = document.createElement("iframe");
     iframe.id = "torem-chat-iframe";
-    iframe.src = "https://yourdomain.com/chat-ui";
+    iframe.src = "https://yourdomain.com/chat-ui"; // 🔁 Replace with real chat UI URL
     Object.assign(iframe.style, {
       position: "fixed",
       bottom: "90px",
