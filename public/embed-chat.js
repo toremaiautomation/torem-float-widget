@@ -7,6 +7,7 @@
 
   // Logo image inside button
 chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/image.png" alt="Chat" style="width: 32px; height: 32px;" />';
+ 
   Object.assign(chatBtn.style, {
     position: "fixed",
     bottom: "20px",
