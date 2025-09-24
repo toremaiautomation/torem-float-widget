@@ -6,9 +6,11 @@
   chatBtn.id = "torem-widget";
 
   // Logo image inside button
-chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover;" />';  Object.assign(chatBtn.style, {
+  chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover;" />';
 
-  position: "fixed",
+  // Style the button
+  Object.assign(chatBtn.style, {
+    position: "fixed",
     bottom: "20px",
     right: "20px",
     width: "60px",
@@ -23,8 +25,12 @@ chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" 
     zIndex: "9999",
     boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
     transition: "all 0.2s ease",
+    opacity: "0",
+    transform: "translateY(20px)",
+    animation: "slideIn 0.5s ease-out forwards"
   });
 
+  // Hover animation
   chatBtn.onmouseenter = function () {
     chatBtn.style.transform = "scale(1.1)";
     chatBtn.style.boxShadow = "0 0 12px #3b82f6";
@@ -60,5 +66,21 @@ chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" 
     document.body.appendChild(iframe);
   };
 
+  // Add button and animation style to document
   document.body.appendChild(chatBtn);
+
+  const styleTag = document.createElement("style");
+  styleTag.innerHTML = `
+    @keyframes slideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  `;
+  document.head.appendChild(styleTag);
 })();
