@@ -5,14 +5,20 @@
   const chatBtn = document.createElement("div");
   chatBtn.id = "torem-widget";
 
-  // Logo image inside button
-  chatBtn.innerHTML = '<img src="https://torem-float-widget.vercel.app/Image.png" alt="Chat" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover;" />';
+  // Logo inside the button
+  chatBtn.innerHTML = `
+    <img 
+      src="https://torem-float-widget.vercel.app/Image.png" 
+      alt="Chat" 
+      style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover;" 
+    />
+  `;
 
-  // Style the button
+  // Base styling
   Object.assign(chatBtn.style, {
     position: "fixed",
     bottom: "20px",
-    right: "20px",
+    right: "-80px", // Start off-screen for animation
     width: "60px",
     height: "60px",
     background: "#ffffff",
@@ -24,24 +30,22 @@
     cursor: "pointer",
     zIndex: "9999",
     boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-    transition: "all 0.2s ease",
     opacity: "0",
-    transform: "translateY(20px)",
-    animation: "slideIn 0.5s ease-out forwards"
+    animation: "slideInRight 0.6s ease-out forwards",
   });
 
-  // Hover animation
-  chatBtn.onmouseenter = function () {
-    chatBtn.style.transform = "scale(1.1)";
+  // Hover effect (scale applied via CSS class to avoid overwrite)
+  chatBtn.addEventListener("mouseenter", () => {
     chatBtn.style.boxShadow = "0 0 12px #3b82f6";
-  };
+    chatBtn.style.transform = "scale(1.05)";
+  });
 
-  chatBtn.onmouseleave = function () {
-    chatBtn.style.transform = "scale(1)";
+  chatBtn.addEventListener("mouseleave", () => {
     chatBtn.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
-  };
+    chatBtn.style.transform = "scale(1)";
+  });
 
-  // Toggle iframe on button click
+  // Click: toggle iframe
   chatBtn.onclick = function () {
     const existing = document.getElementById("torem-chat-iframe");
     if (existing) {
@@ -51,7 +55,7 @@
 
     const iframe = document.createElement("iframe");
     iframe.id = "torem-chat-iframe";
-    iframe.src = "https://yourdomain.com/chat-ui"; // 🔁 Replace with real chat UI URL
+    iframe.src = "https://yourdomain.com/chat-ui"; // Change this
     Object.assign(iframe.style, {
       position: "fixed",
       bottom: "90px",
@@ -66,19 +70,19 @@
     document.body.appendChild(iframe);
   };
 
-  // Add button and animation style to document
   document.body.appendChild(chatBtn);
 
+  // Add animation CSS
   const styleTag = document.createElement("style");
   styleTag.innerHTML = `
-    @keyframes slideIn {
+    @keyframes slideInRight {
       0% {
         opacity: 0;
-        transform: translateY(20px);
+        right: -80px;
       }
       100% {
         opacity: 1;
-        transform: translateY(0);
+        right: 20px;
       }
     }
   `;
