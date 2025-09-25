@@ -1,147 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Torem AI Chat</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f9fb;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Torem AI Demo Chat</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f8f9fb;
+      }
+      .chat-container {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        opacity: 0;
+        transform: scale(0.95);
+        animation: fadeInUp 0.4s forwards;
+      }
 
-    .chat-container {
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      animation: fadeIn 0.5s ease-in-out;
-    }
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+      h3 {
+        margin-top: 0;
+        font-size: 18px;
+      }
 
-    h3 {
-      margin: 0;
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #1f2937;
-    }
+      .welcome {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 16px;
+      }
 
-    .welcome {
-      font-size: 14px;
-      margin-bottom: 16px;
-      color: #4b5563;
-    }
+      .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
 
-    .response-box {
-      white-space: pre-wrap;
-      font-size: 14px;
-      color: #111827;
-      background: #e5e7eb;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-      min-height: 50px;
-    }
+      .quick-replies button {
+        padding: 8px 12px;
+        font-size: 13px;
+        border: none;
+        border-radius: 6px;
+        background-color: #e7ecff;
+        color: #2b4eff;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
 
-    .input-area {
-      display: flex;
-      gap: 10px;
-    }
+      .quick-replies button:hover {
+        background-color: #d2dbff;
+      }
 
-    textarea {
-      flex: 1;
-      font-size: 14px;
-      padding: 10px;
-      resize: none;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      font-family: inherit;
-    }
+      .input-box {
+        display: flex;
+        gap: 8px;
+      }
 
-    button {
-      padding: 10px 14px;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
+      .input-box input {
+        flex: 1;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
 
-    button:hover {
-      background: #2563eb;
-    }
+      .input-box button {
+        padding: 10px 16px;
+        background: #2b4eff;
+        border: none;
+        color: white;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
 
-    .quick-buttons {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .quick-buttons button {
-      background: #e0e7ff;
-      color: #1e40af;
-      font-size: 13px;
-    }
-
-    .quick-buttons button:hover {
-      background: #c7d2fe;
-    }
-  </style>
-</head>
-<body>
-  <div class="chat-container">
-    <div>
+      .response {
+        margin-top: 16px;
+        font-size: 14px;
+        color: #222;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
       <h3>Talk to our AI</h3>
-      <p class="welcome">Welcome! I can help with quotes, info, or questions about your services. Ask anything or click below.</p>
-      <div id="response" class="response-box"></div>
-      <div class="quick-buttons">
-        <button onclick="fillQuick('What services do you offer?')">What services do you offer?</button>
-        <button onclick="fillQuick('Can I get a free estimate?')">Can I get a free estimate?</button>
+      <div class="welcome">
+        👋 Welcome to Torem AI!<br />
+        I'm your demo bot — ask me anything about our automation services, pricing, setup, or how we capture leads for you 24/7.
       </div>
+
+      <div class="quick-replies">
+        <button onclick="fillAndSend('How does your chatbot work?')">How does your chatbot work?</button>
+        <button onclick="fillAndSend('Do you integrate with CRMs?')">Do you integrate with CRMs?</button>
+        <button onclick="fillAndSend('What industries do you support?')">What industries do you support?</button>
+      </div>
+
+      <div class="input-box">
+        <input type="text" id="msg" placeholder="Type your message..." />
+        <button onclick="send()">Send</button>
+      </div>
+
+      <div class="response" id="response"></div>
     </div>
 
-    <div class="input-area">
-      <textarea id="msg" rows="2" placeholder="Type your message..."></textarea>
-      <button onclick="send()">Send</button>
-    </div>
-  </div>
+    <script>
+      function fillAndSend(msg) {
+        document.getElementById('msg').value = msg;
+        send();
+      }
 
-  <script>
-    function fillQuick(text) {
-      document.getElementById("msg").value = text;
-    }
+      function send() {
+        const input = document.getElementById("msg").value;
+        if (!input.trim()) return;
 
-    function send() {
-      const input = document.getElementById("msg").value;
-      document.getElementById("response").innerText = "Thinking...";
-      fetch("https://toremai.app.n8n.cloud/webhook-test/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: input,
-          session_id: "site-visitor",
-          client_id: "torem"
-        }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("response").innerText = data.reply;
-          document.getElementById("msg").value = "";
+        fetch("https://toremai.app.n8n.cloud/webhook-test/chatbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: input,
+            session_id: "site-visitor",
+            client_id: "torem",
+          }),
         })
-        .catch(err => {
-          document.getElementById("response").innerText = "Error: " + err;
-        });
-    }
-  </script>
-</body>
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("response").innerText = data.reply;
+          })
+          .catch((err) => {
+            document.getElementById("response").innerText = "Error: " + err.message;
+          });
+      }
+    </script>
+  </body>
 </html>
