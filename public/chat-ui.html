@@ -1,52 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Torem AI Chat</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        margin: 0;
-        padding: 20px;
-      }
-      input, button {
-        font-size: 16px;
-        padding: 10px;
-        width: 100%;
-        margin-top: 10px;
-      }
-      #response {
-        margin-top: 20px;
-        white-space: pre-wrap;
-      }
-    </style>
-  </head>
-  <body>
-    <h3>Talk to our AI</h3>
-    <input type="text" id="msg" placeholder="Ask anything..." />
-    <button onclick="send()">Send</button>
-    <div id="response"></div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Torem AI Chat</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fb;
+    }
 
-    <script>
-      function send() {
-        const input = document.getElementById("msg").value;
-        fetch("https://toremai.app.n8n.cloud/webhook-test/chatbot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: input,
-            session_id: "site-visitor",
-            client_id: "torem"
-          }),
+    .chat-container {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .welcome {
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: #4b5563;
+    }
+
+    .response-box {
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: #111827;
+      background: #e5e7eb;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      min-height: 50px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    textarea {
+      flex: 1;
+      font-size: 14px;
+      padding: 10px;
+      resize: none;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-family: inherit;
+    }
+
+    button {
+      padding: 10px 14px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .quick-buttons {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-buttons button {
+      background: #e0e7ff;
+      color: #1e40af;
+      font-size: 13px;
+    }
+
+    .quick-buttons button:hover {
+      background: #c7d2fe;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div>
+      <h3>Talk to our AI</h3>
+      <p class="welcome">Welcome! I can help with quotes, info, or questions about your services. Ask anything or click below.</p>
+      <div id="response" class="response-box"></div>
+      <div class="quick-buttons">
+        <button onclick="fillQuick('What services do you offer?')">What services do you offer?</button>
+        <button onclick="fillQuick('Can I get a free estimate?')">Can I get a free estimate?</button>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <textarea id="msg" rows="2" placeholder="Type your message..."></textarea>
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function fillQuick(text) {
+      document.getElementById("msg").value = text;
+    }
+
+    function send() {
+      const input = document.getElementById("msg").value;
+      document.getElementById("response").innerText = "Thinking...";
+      fetch("https://toremai.app.n8n.cloud/webhook-test/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: input,
+          session_id: "site-visitor",
+          client_id: "torem"
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("response").innerText = data.reply;
+          document.getElementById("msg").value = "";
         })
-          .then((res) => res.json())
-          .then((data) => {
-            document.getElementById("response").innerText = data.reply;
-          })
-          .catch((err) => {
-            document.getElementById("response").innerText = "Error: " + err;
-          });
-      }
-    </script>
-  </body>
+        .catch(err => {
+          document.getElementById("response").innerText = "Error: " + err;
+        });
+    }
+  </script>
+</body>
 </html>
