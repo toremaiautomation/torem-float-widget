@@ -55,7 +55,7 @@
 
     const iframe = document.createElement("iframe");
     iframe.id = "torem-chat-iframe";
-    iframe.src = "https://yourdomain.com/chat-ui"; // ⬅️ Update this to your chat UI
+iframe.src = "https://torem-float-widget.vercel.app/chat-ui.html";    
     Object.assign(iframe.style, {
       position: "fixed",
       bottom: "90px",
