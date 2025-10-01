@@ -2,159 +2,157 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Torem AI Chat</title>
+    <title>Torem AI</title>
     <style>
-      * {
-        box-sizing: border-box;
-      }
-
       body {
         margin: 0;
         padding: 0;
+        font-family: "Segoe UI", sans-serif;
         background: transparent;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
 
       .chat-wrapper {
-        width: 360px;
-        height: 560px;
-        background: #ffffff;
+        width: 380px;
+        height: 520px;
         border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        background: #fff;
         display: flex;
         flex-direction: column;
         overflow: hidden;
       }
 
       .chat-header {
-        padding: 16px 20px 8px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        padding: 16px 20px 12px;
+        border-bottom: 1px solid #eee;
         font-weight: 600;
         font-size: 14px;
-        border-bottom: 1px solid #e4e4e7;
-      }
-
-      .chat-header img {
-        width: 18px;
-        height: 18px;
-        object-fit: cover;
-        border-radius: 50%;
-      }
-
-      .chat-body {
-        padding: 16px 20px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        overflow-y: auto;
-      }
-
-      .chat-message {
-        font-size: 14px;
-        color: #111827;
-        line-height: 1.4;
-        margin-bottom: 20px;
-      }
-
-      .quick-replies {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
-
-      .quick-replies button {
-        background: #f4f4f5;
-        color: #111827;
-        border: none;
-        border-radius: 14px;
-        padding: 10px 14px;
-        font-size: 14px;
-        cursor: pointer;
-        text-align: left;
-        transition: background 0.3s;
-      }
-
-      .quick-replies button:hover {
-        background: #e4e4e7;
-      }
-
-      .chat-input-wrapper {
-        padding: 12px 16px;
-        border-top: 1px solid #e4e4e7;
         display: flex;
         align-items: center;
         gap: 8px;
       }
 
-      .chat-input-wrapper input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #d4d4d8;
-        border-radius: 12px;
-        font-size: 14px;
+      .chat-header img {
+        width: 16px;
+        height: 16px;
       }
 
-      .chat-input-wrapper button {
-        padding: 10px 16px;
-        background: #6366f1;
-        color: white;
+      .chat-body {
+        padding: 16px 20px 0;
+        flex: 1;
+        overflow-y: auto;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .chat-body p {
+        margin-bottom: 16px;
+      }
+
+      .quick-replies {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .quick-replies button {
+        padding: 10px 14px;
         border: none;
+        background: #f1f2ff;
+        color: #2b4eff;
         border-radius: 12px;
+        text-align: left;
         font-size: 14px;
         cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .quick-replies button:hover {
+        background: #dfe4ff;
+      }
+
+      .response {
+        padding: 0 20px;
+        font-size: 14px;
+        color: #222;
+        white-space: pre-wrap;
+        margin-bottom: 12px;
       }
 
       .loading {
+        padding: 0 20px;
         font-size: 14px;
-        color: #6b7280;
-        font-style: italic;
-        margin-top: 10px;
+        color: #888;
+        margin-bottom: 12px;
+      }
+
+      .chat-footer {
+        padding: 12px 16px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .chat-footer input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 999px;
+        font-size: 14px;
+      }
+
+      .chat-footer button {
+        padding: 10px 16px;
+        border: none;
+        background: #2b4eff;
+        color: #fff;
+        border-radius: 999px;
+        font-size: 14px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <div class="chat-wrapper">
       <div class="chat-header">
-        <img src="https://torem-float-widget.vercel.app/Image.png" alt="Logo" />
+        <img src="https://torem-float-widget.vercel.app/Image.png" />
         Torem AI
       </div>
-      <div class="chat-body">
-        <div class="chat-message">
-          Hi 👋 Ready to explore Torem AI?<br />
-          Ask me anything to get started with automating your business!
-        </div>
+
+      <div class="chat-body" id="chat">
+        <p>Hi 👋 Ready to explore Torem AI?<br />
+        Ask me anything to get started with automating your business!</p>
+
         <div class="quick-replies">
           <button onclick="fillAndSend('How does your chatbot work?')">How does your chatbot work?</button>
           <button onclick="fillAndSend('Do you integrate with CRMs?')">Do you integrate with CRMs?</button>
           <button onclick="fillAndSend('What industries do you support?')">What industries do you support?</button>
         </div>
-        <div class="chat-message" id="response"></div>
-        <div class="loading" id="loading" style="display: none;">Torem is thinking...</div>
       </div>
-      <div class="chat-input-wrapper">
+
+      <div class="chat-footer">
         <input type="text" id="msg" placeholder="Write your message" />
         <button onclick="send()">Send</button>
       </div>
     </div>
 
     <script>
-      function fillAndSend(text) {
-        document.getElementById("msg").value = text;
+      function fillAndSend(msg) {
+        document.getElementById('msg').value = msg;
         send();
       }
 
       function send() {
-        const input = document.getElementById("msg").value.trim();
-        const responseDiv = document.getElementById("response");
-        const loading = document.getElementById("loading");
-        if (!input) return;
+        const input = document.getElementById("msg").value;
+        if (!input.trim()) return;
 
-        loading.style.display = "block";
-        responseDiv.innerText = "";
+        const chat = document.getElementById("chat");
+        const loading = document.createElement("div");
+        loading.className = "loading";
+        loading.innerText = "Torem is thinking...";
+        chat.appendChild(loading);
 
         fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
           method: "POST",
@@ -167,13 +165,22 @@
         })
           .then((res) => res.json())
           .then((data) => {
-            loading.style.display = "none";
-            responseDiv.innerText = data.reply || "No reply received.";
+            loading.remove();
+            const reply = document.createElement("div");
+            reply.className = "response";
+            reply.innerText = data.reply || "(No reply)";
+            chat.appendChild(reply);
+            chat.scrollTop = chat.scrollHeight;
           })
           .catch((err) => {
-            loading.style.display = "none";
-            responseDiv.innerText = "Error: " + err.message;
+            loading.remove();
+            const error = document.createElement("div");
+            error.className = "response";
+            error.innerText = "Error: " + err.message;
+            chat.appendChild(error);
           });
+
+        document.getElementById("msg").value = "";
       }
     </script>
   </body>
