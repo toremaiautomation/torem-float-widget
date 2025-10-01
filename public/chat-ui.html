@@ -7,91 +7,115 @@
       * {
         box-sizing: border-box;
       }
-
       body {
         margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", sans-serif;
+        font-family: 'Segoe UI', sans-serif;
         background: transparent;
       }
 
-      .chat-container {
+      .chat-box {
         width: 100%;
-        max-width: 420px;
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        padding: 16px;
-        color: #1a1a1a;
+        height: 100%;
+        background: #ffffff;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .chat-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-weight: 600;
         font-size: 15px;
       }
 
-      .welcome {
-        font-size: 16px;
-        margin-bottom: 18px;
-        line-height: 1.5;
+      .chat-header img {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+      }
+
+      .chat-welcome {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 16px;
+        line-height: 1.4;
       }
 
       .quick-replies {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-bottom: 18px;
+        gap: 8px;
+        margin-bottom: 16px;
       }
 
       .quick-replies button {
-        padding: 10px 16px;
-        font-size: 15px;
+        background: #f3f4f6;
+        color: #1f2937;
         border: none;
         border-radius: 12px;
-        background-color: #f0f1f9;
-        color: #2b2b64;
-        cursor: pointer;
+        padding: 10px 14px;
         text-align: left;
-        transition: background 0.3s;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
       }
 
       .quick-replies button:hover {
-        background-color: #e2e4f4;
-      }
-
-      .input-box {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: #f3f4f8;
-        padding: 10px;
-        border-radius: 14px;
-      }
-
-      .input-box input {
-        flex: 1;
-        border: none;
-        background: transparent;
-        font-size: 15px;
-        outline: none;
-      }
-
-      .input-box button {
-        background: #5c5be5;
-        color: white;
-        padding: 10px 16px;
-        font-size: 14px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
+        background: #e5e7eb;
       }
 
       .response {
-        margin-top: 18px;
         font-size: 14px;
+        color: #111827;
+        margin-top: auto;
         white-space: pre-wrap;
+        line-height: 1.5;
       }
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 12px;
+        background: #f9fafb;
+      }
+
+      .input-row input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .input-row button {
+        background: #6366f1;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
     </style>
   </head>
   <body>
-    <div class="chat-container">
-      <div class="welcome">
+    <div class="chat-box">
+      <div class="chat-header">
+        <img src="https://torem-float-widget.vercel.app/Image.png" alt="Torem AI" />
+        Torem AI
+      </div>
+
+      <div class="chat-welcome">
         Hi 👋 Ready to explore Torem AI?<br />
         Ask me anything to get started with automating your business!
       </div>
@@ -102,7 +126,7 @@
         <button onclick="fillAndSend('What industries do you support?')">What industries do you support?</button>
       </div>
 
-      <div class="input-box">
+      <div class="input-row">
         <input type="text" id="msg" placeholder="Write your message" />
         <button onclick="send()">Send</button>
       </div>
@@ -112,7 +136,7 @@
 
     <script>
       function fillAndSend(msg) {
-        document.getElementById('msg').value = msg;
+        document.getElementById("msg").value = msg;
         send();
       }
 
@@ -126,7 +150,7 @@
           body: JSON.stringify({
             message: input,
             session_id: "site-visitor",
-            client_id: "torem_ai",
+            client_id: "torem",
           }),
         })
           .then((res) => res.json())
