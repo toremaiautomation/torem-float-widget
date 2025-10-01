@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -95,6 +95,11 @@
         color: #222;
         white-space: pre-wrap;
       }
+
+      /* Add spacing between stacked messages */
+      .response div {
+        margin-bottom: 10px;
+      }
     </style>
   </head>
   <body>
@@ -125,26 +130,48 @@
         send();
       }
 
-      function send() {
-        const input = document.getElementById("msg").value;
-        if (!input.trim()) return;
+      async function send() {
+        const inputEl = document.getElementById("msg");
+        const message = inputEl.value.trim();
+        if (!message) return;
 
-        fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: input,
-            session_id: "site-visitor",
-            client_id: "torem",
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            document.getElementById("response").innerText = data.reply;
-          })
-          .catch((err) => {
-            document.getElementById("response").innerText = "Error: " + err.message;
+        const responseBox = document.getElementById("response");
+
+        // Generate or retrieve session ID (so memory works)
+        let sessionId = localStorage.getItem("chat_session_id");
+        if (!sessionId) {
+          sessionId = "sess_" + Date.now();
+          localStorage.setItem("chat_session_id", sessionId);
+        }
+
+        // Show user message immediately
+        const userMsg = document.createElement("div");
+        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+        responseBox.appendChild(userMsg);
+
+        inputEl.value = "";
+
+        try {
+          const res = await fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: message,
+              session_id: sessionId,
+              client_id: "torem_ai"
+            }),
           });
+
+          const data = await res.json();
+          const botMsg = document.createElement("div");
+          botMsg.innerHTML = `<strong>Torem AI:</strong> ${data.reply || "No response."}`;
+          responseBox.appendChild(botMsg);
+
+        } catch (err) {
+          const errorMsg = document.createElement("div");
+          errorMsg.innerHTML = `<strong>Error:</strong> ${err.message}`;
+          responseBox.appendChild(errorMsg);
+        }
       }
     </script>
   </body>
