@@ -31,15 +31,16 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 16px 20px;
+        padding: 14px 20px;
         border-bottom: 1px solid #eee;
         font-size: 16px;
         font-weight: 600;
+        flex-shrink: 0;
       }
 
       .chat-header img {
-        width: 48px;
-        height: 48px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         object-fit: cover;
       }
@@ -100,6 +101,7 @@
         display: flex;
         gap: 10px;
         background: #fff;
+        flex-shrink: 0;
       }
 
       .chat-footer input {
@@ -130,72 +132,4 @@
       </div>
 
       <div class="chat-body" id="chat">
-        <p>Hi 👋 Ready to explore Torem AI?<br />Ask me anything to get started with automating your business!</p>
-
-        <div class="quick-replies">
-          <button onclick="fillAndSend('How does your chatbot work?')">How does your chatbot work?</button>
-          <button onclick="fillAndSend('Do you integrate with CRMs?')">Do you integrate with CRMs?</button>
-          <button onclick="fillAndSend('What industries do you support?')">What industries do you support?</button>
-        </div>
-      </div>
-
-      <div class="chat-footer">
-        <input id="msg" type="text" placeholder="Write your message..." />
-        <button onclick="send()">Send</button>
-      </div>
-    </div>
-
-    <script>
-      function fillAndSend(msg) {
-        document.getElementById("msg").value = msg;
-        send();
-      }
-
-      function send() {
-        const chat = document.getElementById("chat");
-        const input = document.getElementById("msg").value.trim();
-        if (!input) return;
-
-        const userMsg = document.createElement("div");
-        userMsg.className = "response";
-        userMsg.innerText = input;
-        chat.appendChild(userMsg);
-
-        const loading = document.createElement("div");
-        loading.className = "loading";
-        loading.innerText = "Torem is thinking...";
-        chat.appendChild(loading);
-        chat.scrollTop = chat.scrollHeight;
-
-        fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: input,
-            session_id: "site-visitor",
-            client_id: "torem",
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            loading.remove();
-            const reply = document.createElement("div");
-            reply.className = "response";
-            reply.innerText = data.reply || "(No reply)";
-            chat.appendChild(reply);
-            chat.scrollTop = chat.scrollHeight;
-          })
-          .catch((err) => {
-            loading.remove();
-            const error = document.createElement("div");
-            error.className = "response";
-            error.innerText = "Error: " + err.message;
-            chat.appendChild(error);
-            chat.scrollTop = chat.scrollHeight;
-          });
-
-        document.getElementById("msg").value = "";
-      }
-    </script>
-  </body>
-</html>
+        <p>Hi 
