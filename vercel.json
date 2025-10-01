@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/chat-ui.html", "destination": "/chat-ui.html" }
-  ]
-}
-Add vercel.json to enable chat-ui.html routing
