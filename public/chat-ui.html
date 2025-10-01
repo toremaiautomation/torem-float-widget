@@ -2,116 +2,98 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Torem AI Demo Chat</title>
+    <title>Torem AI Chat</title>
     <style>
       * {
         box-sizing: border-box;
       }
+
       body {
-        font-family: 'Segoe UI', sans-serif;
         margin: 0;
         padding: 0;
-        background: #f8f9fb;
+        font-family: "Segoe UI", sans-serif;
+        background: transparent;
       }
+
       .chat-container {
+        width: 100%;
         max-width: 420px;
-        margin: 0 auto;
-        padding: 20px;
-        border-radius: 12px;
-        background: #ffffff;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.4s ease, opacity 0.4s ease;
-        opacity: 0;
-        transform: scale(0.95);
-        animation: fadeInUp 0.4s forwards;
-      }
-
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      h3 {
-        margin-top: 0;
-        font-size: 18px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        color: #1a1a1a;
+        font-size: 15px;
       }
 
       .welcome {
-        font-size: 14px;
-        color: #333;
-        margin-bottom: 16px;
+        font-size: 16px;
+        margin-bottom: 18px;
+        line-height: 1.5;
       }
 
       .quick-replies {
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 16px;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 18px;
       }
 
       .quick-replies button {
-        padding: 8px 12px;
-        font-size: 13px;
+        padding: 10px 16px;
+        font-size: 15px;
         border: none;
-        border-radius: 6px;
-        background-color: #e7ecff;
-        color: #2b4eff;
+        border-radius: 12px;
+        background-color: #f0f1f9;
+        color: #2b2b64;
         cursor: pointer;
+        text-align: left;
         transition: background 0.3s;
       }
 
       .quick-replies button:hover {
-        background-color: #d2dbff;
+        background-color: #e2e4f4;
       }
 
       .input-box {
         display: flex;
-        gap: 8px;
+        align-items: center;
+        gap: 10px;
+        background: #f3f4f8;
+        padding: 10px;
+        border-radius: 14px;
       }
 
       .input-box input {
         flex: 1;
-        padding: 10px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        outline: none;
       }
 
       .input-box button {
-        padding: 10px 16px;
-        background: #2b4eff;
-        border: none;
+        background: #5c5be5;
         color: white;
+        padding: 10px 16px;
         font-size: 14px;
-        border-radius: 6px;
+        border: none;
+        border-radius: 12px;
         cursor: pointer;
       }
 
       .response {
-        margin-top: 16px;
+        margin-top: 18px;
         font-size: 14px;
-        color: #222;
         white-space: pre-wrap;
-      }
-
-      .response div {
-        margin-bottom: 10px;
-      }
-
-      .typing {
-        font-style: italic;
-        color: #999;
       }
     </style>
   </head>
   <body>
     <div class="chat-container">
-      <h3>Talk to our AI</h3>
       <div class="welcome">
-        👋 Welcome to Torem AI!<br />
-        I'm your demo bot — ask me anything about our automation services, pricing, setup, or how we capture leads for you 24/7.
+        Hi 👋 Ready to explore Torem AI?<br />
+        Ask me anything to get started with automating your business!
       </div>
 
       <div class="quick-replies">
@@ -121,7 +103,7 @@
       </div>
 
       <div class="input-box">
-        <input type="text" id="msg" placeholder="Type your message..." />
+        <input type="text" id="msg" placeholder="Write your message" />
         <button onclick="send()">Send</button>
       </div>
 
@@ -134,52 +116,26 @@
         send();
       }
 
-      async function send() {
-        const inputEl = document.getElementById("msg");
-        const message = inputEl.value.trim();
-        if (!message) return;
+      function send() {
+        const input = document.getElementById("msg").value;
+        if (!input.trim()) return;
 
-        const responseBox = document.getElementById("response");
-
-        // Generate or retrieve session ID
-        let sessionId = localStorage.getItem("chat_session_id");
-        if (!sessionId) {
-          sessionId = "sess_" + Date.now();
-          localStorage.setItem("chat_session_id", sessionId);
-        }
-
-        // Show user's message
-        const userMsg = document.createElement("div");
-        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-        responseBox.appendChild(userMsg);
-
-        // Show typing message
-        const typingMsg = document.createElement("div");
-        typingMsg.classList.add("typing");
-        typingMsg.innerText = "Torem AI is typing...";
-        responseBox.appendChild(typingMsg);
-
-        inputEl.value = "";
-
-        try {
-          const res = await fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              message: message,
-              session_id: sessionId,
-              client_id: "torem_ai"
-            }),
+        fetch("https://toremai.app.n8n.cloud/webhook/chatbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: input,
+            session_id: "site-visitor",
+            client_id: "torem_ai",
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("response").innerText = data.reply;
+          })
+          .catch((err) => {
+            document.getElementById("response").innerText = "Error: " + err.message;
           });
-
-          const data = await res.json();
-
-          // Replace typing with actual response
-          typingMsg.outerHTML = `<div><strong>Torem AI:</strong> ${data.reply || "No response."}</div>`;
-
-        } catch (err) {
-          typingMsg.outerHTML = `<div><strong>Error:</strong> ${err.message}</div>`;
-        }
       }
     </script>
   </body>
